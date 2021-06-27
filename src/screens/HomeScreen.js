@@ -18,6 +18,10 @@ const HomeScreen = () => {
 	const data = useSelector((state) => state.root.data);
 
 	useEffect(() => {
+		getList(pageLimit);
+	}, [pageLimit]);
+
+	const getList = () => {
 		try {
 			setRefreshing(true);
 			dispatch(getData(pageLimit));
@@ -26,7 +30,7 @@ const HomeScreen = () => {
 			setRefreshing(false);
 			Toast.showWithGravity(err, Toast.LONG, Toast.CENTER);
 		}
-	}, [pageLimit]);
+	};
 
 	const fetchData = async (text) => {
 		try {
@@ -69,7 +73,7 @@ const HomeScreen = () => {
 				searchable={{
 					placeholder: 'Search by name',
 					onChangeText: (text) => fetchData(text),
-					onSearchClosed: () => console.log(''),
+					onSearchClosed: () => getList(10),
 				}}
 			/>
 			<FlatList
@@ -80,7 +84,7 @@ const HomeScreen = () => {
 				showsVerticalScrollIndicator={false}
 				onRefresh={() => setPageLimit(10)}
 				refreshing={refreshing}
-				onEndReached={() => onScrollHandler()}
+				onMomentumScrollEnd={() => onScrollHandler()}
 				onEndReachedThreshold={0.5}
 				ListFooterComponent={() => renderFooter()}
 			/>

@@ -59,7 +59,7 @@ const index = () => {
 					name='View History'
 					component={HistoryNavigator}
 					options={{
-						tabBarLabel: 'Home',
+						tabBarLabel: 'View History',
 						tabBarIcon: ({ color, size }) => (
 							<FontAwesome name='history' size={24} color={color} />
 						),
