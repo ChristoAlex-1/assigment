@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getData, searchData } from '../store/action';
 import ListViewItem from '../components/ListViewItem';
 import { Toolbar } from 'react-native-material-ui';
+import Toast from 'react-native-simple-toast';
 
 const HomeScreen = () => {
 	const dispatch = useDispatch();
@@ -17,15 +18,26 @@ const HomeScreen = () => {
 	const data = useSelector((state) => state.root.data);
 
 	useEffect(() => {
-		setRefreshing(true);
-		dispatch(getData(pageLimit));
-		setInterval(function () {
+		try {
+			setRefreshing(true);
+			dispatch(getData(pageLimit));
 			setRefreshing(false);
-		}, 2000);
+		} catch (err) {
+			setRefreshing(false);
+			Toast.showWithGravity(err, Toast.LONG, Toast.CENTER);
+		}
 	}, [pageLimit]);
 
 	const fetchData = async (text) => {
-		await dispatch(searchData(text));
+		try {
+			setRefreshing(true);
+			await dispatch(searchData(text));
+			setRefreshing(false);
+		} catch (err) {
+			alert(err);
+			setRefreshing(false);
+			Toast.showWithGravity(err, Toast.LONG, Toast.CENTER);
+		}
 	};
 
 	const onScrollHandler = async () => {
